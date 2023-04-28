@@ -1,18 +1,26 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Detail = () => {
+    const {id} = useParams()
+    const todos = useSelector((state) => state.todolist.find((todo) => {
+        return todo.id === id
+    }));
+    const navigate = useNavigate();
+
     return (
         <div>
             <StContainer>
                 <StDetail>
                     <div>
                         <StDetailHeader>
-                            <div>ID : 1</div>
-                            <StButton>이전으로</StButton>
+                            <div>ID : {id}</div>
+                            <StButton onClick={() => navigate("/")} >이전으로</StButton>
                         </StDetailHeader>
-                        <StTitle>제목</StTitle>
-                        <StContent>내용</StContent>
+                        <StTitle>{todos.title}</StTitle>
+                        <StContent>{todos.content}</StContent>
                     </div>
                 </StDetail>
             </StContainer>

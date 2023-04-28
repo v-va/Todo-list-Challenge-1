@@ -1,23 +1,32 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import uuid from "react-uuid";
 import styled from "styled-components";
+import { delTodo, toggleTodo } from "../redux/modules/todolist";
 
 const ContentBox = () => {
     const todos = useSelector((state) => {
         return state.todolist;
     });
 
+    const dispatch = useDispatch()
+
+    const deleteTodoHandler = (id) => {
+        dispatch(delTodo(id))
+    }
+
+    const toggleTodoHandler = (id) => {
+        dispatch(toggleTodo(id))
+    }
+
     return (
         <StListContainer>
             <h2>Working...🔥</h2>
             <StListWrapper>
                 {todos.map((todo) => {
-                    const id = uuid();
                     if (todo.isDone === false) {
                         return (
-                            <StCard key={id}>
-                                <StLink>
+                            <StCard key={todo.id}>
+                                <StLink to={`/detail/${todo.id}`}>
                                     <div>상세보기</div>
                                 </StLink>
                                 <div>
@@ -25,8 +34,8 @@ const ContentBox = () => {
                                     <div className="cardContent">{todo.content}</div>
                                 </div>
                                 <StCardBtnWrap>
-                                    <StButton bdc="red">삭제하기</StButton>
-                                    <StButton bdc="green">완료!</StButton>
+                                    <StButton bdc="red" onClick={() => deleteTodoHandler(todo.id)}>삭제하기</StButton>
+                                    <StButton bdc="green" onClick={() => toggleTodoHandler(todo.id)}>완료!</StButton>
                                 </StCardBtnWrap>
                             </StCard>
                         );
@@ -36,11 +45,10 @@ const ContentBox = () => {
             <h2>Done..! 🌟</h2>
             <StListWrapper>
                 {todos.map((todo) => {
-                    const id = uuid();
                     if (todo.isDone === true) {
                         return (
-                            <StCard key={id}>
-                                <StLink>
+                            <StCard key={todo.id}>
+                                <StLink to={`/detail/${todo.id}`}>
                                     <div>상세보기</div>
                                 </StLink>
                                 <div>
@@ -48,8 +56,8 @@ const ContentBox = () => {
                                     <div className="cardContent">{todo.content}</div>
                                 </div>
                                 <StCardBtnWrap>
-                                    <StButton bdc="red">삭제하기</StButton>
-                                    <StButton bdc="green">완료!</StButton>
+                                    <StButton bdc="red" onClick={() => deleteTodoHandler(todo.id)}>삭제하기</StButton>
+                                    <StButton bdc="green" onClick={() => toggleTodoHandler(todo.id)} >완료!</StButton>
                                 </StCardBtnWrap>
                             </StCard>
                         );

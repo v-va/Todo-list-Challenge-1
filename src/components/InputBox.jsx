@@ -1,17 +1,46 @@
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import { addTodo } from "../redux/modules/todolist";
+import uuid from "react-uuid";
 
 const InputBox = () => {
+    const id = uuid();
+
+    const [input, setInput] = useState({title: "", content: ""})
+    const dispatch = useDispatch();
+
+    const titleChangeHandler = (e) => {
+        const title = e.target.value;
+        setInput({...input, title});
+    }
+
+    const contentChangeHandler = (e) => {
+        const content = e.target.value;
+        setInput({...input, content});
+    }
+
+    const addTodoHandler = (e) => {
+        e.preventDefault()
+        const newTodo = {
+            id,
+            title: input.title,
+            content: input.content,
+            isDone: false
+        };
+        dispatch(addTodo(newTodo));
+        setInput({title: '', content: ''});
+    }
+
     return (
         <StInputContainer>
             <StInputWrap>
                 <StInputLabel>제목</StInputLabel>
-                <StInput type="text" />
-
+                <StInput type="text" onChange={titleChangeHandler} value={input.title} />
                 <StInputLabel>내용</StInputLabel>
-                <StInput type="text" />
+                <StInput type="text" onChange={contentChangeHandler} value={input.content} />
             </StInputWrap>
-            <StAddButton>추가하기</StAddButton>
+            <StAddButton onClick={addTodoHandler}>추가하기</StAddButton>
         </StInputContainer>
     );
 };
